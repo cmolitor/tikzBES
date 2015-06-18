@@ -1,0 +1,25 @@
+\documentclass[varwidth=false, border=1pt]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning}
+
+% Load tikz library in file "tikzlibraryBES.code.tex"
+\usetikzlibrary{BES}
+
+
+\begin{document}
+\begin{tikzpicture}
+
+%\pic[scale=1.0] at (0,0) {House=0.65/0.15/35};
+%\pic[scale=0.5] at (-0.825,0.2) {HP};
+%\pic at (-0.25,0.36) {WT};
+
+\pic {BES_HP};
+%\pic at (5,5) {House};
+\scalebox{1.0}{
+\pic at(1.5,0.0) {BES_CHP};
+}
+
+\end{tikzpicture}
+
+\end{document}

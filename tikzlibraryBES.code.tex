@@ -1,0 +1,131 @@
+\tikzset{
+  %===================================
+  % House
+  pics/House/.style args={#1/#2/#3}{
+  	code={
+    % Define house parameters
+	\newcommand\wallheight{#1}  % 0.65
+	\newcommand\roofoverhang{#2}  % 0.15
+	\newcommand\roofangle{#3}  % 35
+
+	% Calculate some dependent sizes
+	\pgfmathsetmacro\lengthroof{0.5/cos(\roofangle)+\roofoverhang}
+
+	% draw profile of house
+	\draw[line width=1pt] (-0.5,\wallheight) -- (-0.5,0) --  (0.5,0) -- (0.5,\wallheight) -- ++(-\roofangle:\roofoverhang) -- ++(180-\roofangle:\lengthroof) -- ++(180+\roofangle:\lengthroof) -- cycle;
+  }},
+  pics/House/.default={0.65/0.15/35},
+  %===================================
+  % Heat Pump (HP)
+  pics/HP/.style={
+  	code={
+  	% Casing
+  	\pic[scale=0.5] {Case};
+  	\draw[rounded corners=1pt, fill=black, draw=black] (0.235,0.025) rectangle (0.435,0.25);
+  	\draw[rounded corners=1pt, fill=black, draw=black] (0.235,-0.025) rectangle (0.435,-0.25);
+  	% Fence
+	\foreach \y in {-0.2625,-0.1875,-0.1125,-0.0375,0.0375,0.1125,0.1875,0.2625}{
+		\pgfmathsetmacro\fth{(\y+0.4)/0.8*100}
+		\draw[thin] (-0.4,\y) -- (0.2,\y);
+	}
+	% Wings
+	\foreach \w in {0,90,180,270}{ %30,150,270
+		\draw[xshift=-0.1cm,rotate=\w, fill=black, draw=white, very thin] (0,0) .. controls (-0.3,0.36) and (0.1,0.36) .. cycle;
+	}
+	% Axis
+	\draw[fill=white, xshift=-0.1cm] circle(0.03cm) ;
+  	}},
+  %===================================
+  % Water tank (WT)
+  pics/WT/.style={
+  	code={
+  	\shade[bottom color=blue, top color=red, rounded corners=1pt, thin, draw=black] (-0.175,-0.3) rectangle (0.175,0.25);
+  	\draw[thick] (-0.15,-0.32) -- (-0.05,-0.32);
+  	\draw[thick] (0.05,-0.32) -- (0.15,-0.32);
+  	}},
+  %===================================
+  % BES HP
+  pics/BES_HP/.style={
+  	code={
+  	\pic[scale=1.0] at (0,0) {House=0.65/0.15/35};
+	\pic[scale=0.5] at (-0.825,0.2) {HP};
+	\pic at (-0.275,0.36) {WT};
+  	}},
+  %===================================
+  % Case 
+  pics/Case/.style={
+  	code={
+  	\draw[thick, rounded corners=1pt] (-0.5,-0.35) rectangle (0.5,0.35);
+  	\draw[thick] (-0.45,-0.4) -- (-0.25,-0.4);
+  	\draw[thick] (0.25,-0.4) -- (0.45,-0.4);
+  }},
+  %===================================
+  % Electrical Machine (EM) 
+  pics/EM/.style={
+    code={
+	% Electrical machine
+	\draw[rounded corners=0.1,fill=black] (-0.6,-0.4) rectangle (0.7,0.4);
+	\foreach \y in {-0.25,-0.125,0.0,0.125,0.25}{
+	\draw[very thin, color=white] (-0.3,\y)--(0.3,\y);
+	}
+	% senkrechte weiße Linie
+	\draw[very thin, color=white] (-0.45,-0.35) --(-0.45,0.35);
+	\draw[very thin, color=white] (0.45,-0.35) --(0.45,0.35);
+	% Elektrischer Anschluss
+	\draw[very thick] (-0.25,0.56) -- (0.25,0.56);
+	\draw[thin] (-0.27,0.7) -- (0.27,0.7);
+%	\draw[fill=white, line width=1] (0,0.57) circle (3pt);
+%	\draw[fill=black, line width=0] (-0.05,0.57) circle (0.6pt);
+%	\draw[fill=black, line width=0] (0.05,0.57) circle (0.6pt);
+	% Kupplung
+	\draw[fill=black] (-0.775,-0.25) rectangle (-0.625,0.25);
+	%Sockel
+	\draw[fill=black] (-0.3,-0.425) rectangle (0.3,-0.625);
+	\draw[fill=black, rounded corners=0.05] (-0.4,-0.525) rectangle (0.4,-0.65);
+  }},
+  %===================================
+  % Motor
+  pics/Motor/.style={
+    code={
+    % Zylinder
+	\draw[fill=black] (-0.33,0) rectangle (0.33,0.33);
+	
+	% Zylinderkopf
+	\draw[semithick] (-0.5,-1.5) -- (-0.5,0.5) --(0.5,0.5) -- (0.5,-1.5);
+	
+	% Kurbelwelle
+	\draw[white, fill=black,very thin] (-0.6,-0.925) -- (-0.06,-0.925)--(-0.06,-0.775)--(-0.6,-0.775)--cycle;
+	\draw[white, fill=black,very thin] (0.1,-0.925) -- (0.75,-0.925)--(0.75,-0.775)--(0.1,-0.775)--cycle;
+	\draw[thin] (-0.1,-1.05) -- (-0.1,-0.65) -- (0.1,-0.65) -- (0.1,-1.05);
+	
+	% Kurbelgestänge
+	\draw[thin] (0,-0.725) -- (0,0.3);
+	
+	% Heat exchanger
+%	\foreach \y in {-0.4,-0.2,0.0,0.2,0.4}{
+%		\pgfmathsetmacro\fth{(\y+0.4)/0.8*100}
+%		\draw[white, fill=red!\fth!blue, very thin] (-0.6,\y) circle (0.1);
+%		\draw[white, fill=red!\fth!blue, very thin] (+0.6,\y) circle (0.1);
+%	}
+  }},
+  %===================================
+  % Combined Heat and Power Unit (CHP) 
+  pics/CHP/.style={
+  	code={
+  		\pic[scale=0.5] {Case};
+  		\pic[scale=0.14] at (-0.12,0.05) {Motor};
+  		\pic[scale=0.14] at (0.1,-0.065) {EM};
+  }},
+  %===================================
+  % BES CHP
+  pics/BES_CHP/.style={
+  	code={
+  	\pic at (0,0) {House=0.65/0.15/35};
+	\pic at (0.2,0.25) {CHP};
+	\pic at (-0.275,0.36) {WT};
+  	}},
+  % Template
+%  pics/Template/.style args={}{
+%  	code={
+%  	}}, 
+}
