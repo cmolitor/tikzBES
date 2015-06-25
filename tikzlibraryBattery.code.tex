@@ -1,0 +1,17 @@
+\tikzset{
+	%===================================
+	% House
+	pics/Battery1/.style={
+		code={
+			% Machine house
+%			\draw (0,0) -- (1.75,0.25);
+			\filldraw[rounded corners=1.5] (-0.4,1.989) rectangle (0.4,2.15);
+			
+			% Rectangle
+			\draw[line width=1pt, rounded corners=5pt] (-1,-2) rectangle (1,2);
+			
+			% Füllung
+			\foreach \x in {-1.7, -1.5,...,-0.7} 
+			\draw[line width=2pt](-0.9,\x) -- (0.9,\x); 
+	}},
+}
